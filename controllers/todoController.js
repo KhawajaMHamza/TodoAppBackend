@@ -1,8 +1,10 @@
 const Todo = require('../models/Todo');
+const connectDB = require('../config/database');
 
 // Get all todos
 exports.getAllTodos = async (req, res) => {
   try {
+    await connectDB();
     const todos = await Todo.find().sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
@@ -20,6 +22,7 @@ exports.getAllTodos = async (req, res) => {
 // Get single todo by ID
 exports.getTodoById = async (req, res) => {
   try {
+    await connectDB();
     const todo = await Todo.findById(req.params.id);
     
     if (!todo) {
@@ -44,6 +47,7 @@ exports.getTodoById = async (req, res) => {
 // Create a new todo
 exports.createTodo = async (req, res) => {
   try {
+    await connectDB();
     const { title, description, priority } = req.body;
 
     if (!title) {
@@ -75,6 +79,7 @@ exports.createTodo = async (req, res) => {
 // Update a todo
 exports.updateTodo = async (req, res) => {
   try {
+    await connectDB();
     const { title, description, completed, priority } = req.body;
 
     let todo = await Todo.findById(req.params.id);
@@ -110,6 +115,7 @@ exports.updateTodo = async (req, res) => {
 // Delete a todo
 exports.deleteTodo = async (req, res) => {
   try {
+    await connectDB();
     const todo = await Todo.findByIdAndDelete(req.params.id);
 
     if (!todo) {
